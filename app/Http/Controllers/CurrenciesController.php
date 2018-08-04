@@ -134,8 +134,8 @@ class CurrenciesController extends Controller
 
     public function ajaxConvert(Request $request)
     {
-        $data = $_POST['data'];
-        dd($data);
+        $input = $request->all();
+        print_r($input);
     }
 
 }

@@ -43,23 +43,16 @@ $(document).ready(function () {
         var usd  = $("#usd").val();
         var cur  = $("#currency").val();
         var date = $("#date").val();
-
+        /*
         if ( usd == null || usd == "", cur == null || cur == "", date == null || date == "") {
             alert("Please input all required fields.");
             return false;
         }
-
-        $.ajax({
-            type: "POST",
-            url: '/api/currency/ajaxConvert',
-            data: { usd : usd, cur : cur, date : date } ,
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
-            success: function (data) {
-                //$('#converted').val(data);
-            }
-        })
-
+        */
+        $.post('/api/currency/ajaxConvert', { usd : usd, cur : cur, date : date }, 
+            function(data){
+                alert(data);
+        });
     });
 
 });
