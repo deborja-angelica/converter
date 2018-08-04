@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/css.css') }}">
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1"/>
+    </head>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/js.js') }}"></script>
+<body>
+    <div class="col-md-6 well">
+        <form method="GET" action="">
+            <div class="form-inline">
+                <label>USD:</label>
+                <input id="usd" class="enjoy-css form-control" type="text" name="input" placeholder="0.00" />
+                &nbsp;&nbsp;&nbsp;
+                <select id="currency" name="currency" class="enjoy-css form-control">
+                    <option value="">Select Currency</option>
+
+                    @foreach ($currencies as $currency)
+                        <option value={{ $currency->code }}>{{ $currency->name }}</option>
+                    @endforeach
+
+                </select>
+                &nbsp;&nbsp;&nbsp;
+                <input id="date" class="enjoy-css form-control" type="date" name="date" onkeydown="return false"/>
+                <br /><br />
+                <label>Conversion:</label>
+                <input id="converted" class="enjoy-css form-control" type="text" name="converted" placeholder="0.00" />
+                <br /><br />
+                <button id="convert" class="myButton form-control">Convert</button>
+            </div>
+        </form>
+    </div>
+    <br />
+    <hr style="border-top:1px dotted #000;"/>
+    <br />
+    <button id="update" class="myButton form-control">Update Rates</button>
+    <br /><br />
+    @if (count($conversions) > 1)
+    <div id="conversion-table">
+        <table class="minimalistBlack" id="conversion" border="1" cellpadding="10">
+            <thead>
+                <tr>
+                    <th>Currency Name</th>
+                    <th>Code</th>
+                    <th>Rate</th>
+                </tr>
+            </thead>
+        @foreach ($conversions as $conversion)
+            <tr>
+                <td>{{ $conversion->name }}</td>
+                <td>{{ $conversion->code }}</td>
+                <td>{{ $conversion->conversion_rate }}</td>
+            <tr>
+        @endforeach
+        </table>
+    </div>
+    @endif
+</body>
+</html>
