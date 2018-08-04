@@ -10,11 +10,12 @@
     <div class="col-md-6 well">
         <form method="GET" action="">
             <div class="form-inline">
-                <label>USD:</label>
+                <label>USD <span style="color: #ff0000;">*</span> :</label>
                 <input id="usd" class="enjoy-css form-control" type="text" name="input" placeholder="0.00" />
                 &nbsp;&nbsp;&nbsp;
+                <label>Convert To <span style="color: #ff0000;">*</span> :</label>
                 <select id="currency" name="currency" class="enjoy-css form-control">
-                    <option value="">Select Currency</option>
+                    <option value="">---</option>
 
                     @foreach ($currencies as $currency)
                         <option value={{ $currency->code }}>{{ $currency->name }}</option>
@@ -22,6 +23,7 @@
 
                 </select>
                 &nbsp;&nbsp;&nbsp;
+                <label>Date <span style="color: #ff0000;">*</span> :</label>
                 <input id="date" class="enjoy-css form-control" type="date" name="date" onkeydown="return false"/>
                 <br /><br />
                 <label>Conversion:</label>

@@ -11,7 +11,7 @@ $(document).ready(function () {
         $('#spinner').fadeIn();
         $.ajax({
             type: "POST",
-            url: 'http://127.0.0.1:8000/api/currency/ajaxUpdate',
+            url: '/api/currency/ajaxUpdate',
             dataType: 'json',
             success: function (data) {
 
@@ -44,9 +44,14 @@ $(document).ready(function () {
         var cur  = $("#currency").val();
         var date = $("#date").val();
 
+        if ( usd == null || usd == "", cur == null || cur == "", date == null || date == "") {
+            alert("Please input all required fields.");
+            return false;
+        }
+
         $.ajax({
             type: "POST",
-            url: 'http://127.0.0.1:8000/api/currency/ajaxConvert',
+            url: '/api/currency/ajaxConvert',
             data: { usd : usd, cur : cur, date : date } ,
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
