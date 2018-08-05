@@ -54,14 +54,19 @@ $(document).ready(function () {
         var date = $("#date").val();
 
         // validation
-        if ( usd == null || usd == "", cur == null || cur == "", date == null || date == "") {
+        if (usd == null || usd == "" || cur == null || cur == "" || date == null || date == "") {
             alert("Please input all required fields.");
             return false;
         }
 
         // additional validation
-        if (isNaN(usd)) alert("Invalid USD input.");
-        if (!isNaN(cur)) alert("Invalid Currency input.");
+        if (isNaN(usd)){
+            alert("Invalid USD input.");
+        }
+        
+        if (!isNaN(cur)) {
+            alert("Invalid Currency input.");
+        }
 
         $('#loading').show();
 
