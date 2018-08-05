@@ -33,6 +33,8 @@
                     <tr>
                 @endforeach
                 </table>
+                @else
+                    <h4>No available exchange rates.</h4>
                 @endif
             </div>
 
