@@ -161,8 +161,8 @@ class CurrencyConversionsController extends Controller
             // get conversion rate
             $rate = DB::table('currency_conversions')->where([
                 ['curr_id', '=', $currency_id[0]],
-                ['updated_at', '>=', date('Y-m-d 00:00:00',strtotime($date))],
-                ['updated_at', '<', date('Y-m-d 23:59:59',strtotime($date))]
+                ['created_at', '>=', date('Y-m-d 00:00:00',strtotime($date))],
+                ['created_at', '<', date('Y-m-d 23:59:59',strtotime($date))]
             ])->pluck('conversion_rate')->toArray();
 
             // if empty $rate
