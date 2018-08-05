@@ -17,6 +17,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/currency', 'CurrenciesController@index');
-Route::post('/currency/ajaxUpdate', 'CurrenciesController@ajaxUpdate');
-Route::post('/currency/ajaxConvert', 'CurrenciesController@ajaxConvert');
+Route::get('/currency', 'CurrencyConversionsController@index');
+Route::post('/currency/ajaxUpdate', 'CurrencyConversionsController@ajaxUpdate');
+Route::post('/currency/ajaxConvert', 'CurrencyConversionsController@ajaxConvert');

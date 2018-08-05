@@ -6,7 +6,7 @@ use DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class CurrenciesController extends Controller
+class CurrencyConversionsController extends Controller
 {
 
     public function index()
@@ -34,18 +34,32 @@ class CurrenciesController extends Controller
 
     public function getConversionRates ()
     {
+
         $conversions = DB::table('currency_conversions')
             ->join('currencies', 'currency_conversions.curr_id', '=', 'currencies.id')
             ->where([
-                ['currency_conversions.created_at', '>', date('Y-m-d H:i:s',strtotime(Carbon::now()->subDays(1)))],
-                ['currency_conversions.updated_at', '<=', date('Y-m-d H:i:s',strtotime(Carbon::now()))]
+                ['currency_conversions.created_at', '>', date('Y-m-d 00:00:00',strtotime(Carbon::now()))]
             ])
             ->get(array(
-                'currencies.id',
                 'currencies.code',
                 'currencies.name',
                 'currency_conversions.conversion_rate',
+            
         ));
+
+        if (count($conversions) < 1) {
+            $conversions = DB::table('currency_conversions')
+                ->join('currencies', 'currency_conversions.curr_id', '=', 'currencies.id')
+                ->where([
+                    ['currency_conversions.created_at', '>', date('Y-m-d 00:00:00',strtotime(Carbon::now()->subDays(1)))]
+                ])
+                ->get(array(
+                    'currencies.code',
+                    'currencies.name',
+                    'currency_conversions.conversion_rate',
+                
+            ));
+        }
 
         return $conversions;
     }
@@ -94,9 +108,8 @@ class CurrenciesController extends Controller
         if (count($rate) < 1) {
             $this->insertConversionRate($id, $data);
         }
-        // exchange rate is new 
-        elseif (date('Y-m-d H:i:s',strtotime($data['pubDate'])) > $rate->created_at
-            && date('Y-m-d H:i:s',strtotime($data['pubDate'])) > $rate->created_at) {
+        // exchange rate is new
+        elseif (date('Y-m-d H:i:s',strtotime($data['pubDate'])) > $rate->created_at) {
             $this->insertConversionRate($id, $data);
         }
         // updated on the same day 
@@ -135,7 +148,34 @@ class CurrenciesController extends Controller
     public function ajaxConvert(Request $request)
     {
         $input = $request->all();
-        print_r($input);
+
+        // validation
+        $usd  = isset($input['usd']) ? $input['usd'] : 1;
+        $cur  = isset($input['cur']) ? $input['cur'] : 'EUR';
+        $date = isset($input['date']) ? $input['cur'] : NOW();
+
+        // get currency id
+        $currency_id = DB::table('currencies')->where('code', $cur)->pluck('id')->toArray();
+
+        if (!count($currency_id) < 1) {
+            // get conversion rate
+            $rate = DB::table('currency_conversions')->where([
+                ['curr_id', '=', $currency_id[0]],
+                ['updated_at', '>=', date('Y-m-d 00:00:00',strtotime($date))],
+                ['updated_at', '<', date('Y-m-d 23:59:59',strtotime($date))]
+            ])->pluck('conversion_rate')->toArray();
+
+            // if empty $rate
+            if (count($rate) < 1) {
+                $sql = DB::table('currency_conversions')->where('curr_id', $currency_id[0])->latest()->first();
+                $rate[0] = $sql->conversion_rate;
+            }
+
+            return $usd * $rate[0];
+        } else {
+            return $usd;
+        }
+
     }
 
 }
