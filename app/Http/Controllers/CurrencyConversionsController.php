@@ -38,7 +38,7 @@ class CurrencyConversionsController extends Controller
         $conversions = DB::table('currency_conversions')
             ->join('currencies', 'currency_conversions.curr_id', '=', 'currencies.id')
             ->where([
-                ['currency_conversions.created_at', '>', date('Y-m-d 00:00:00',strtotime(Carbon::now()))]
+                ['currency_conversions.updated_at', '>', date('Y-m-d 00:00:00',strtotime(Carbon::now()))]
             ])
             ->get(array(
                 'currencies.code',
@@ -51,7 +51,7 @@ class CurrencyConversionsController extends Controller
             $conversions = DB::table('currency_conversions')
                 ->join('currencies', 'currency_conversions.curr_id', '=', 'currencies.id')
                 ->where([
-                    ['currency_conversions.created_at', '>', date('Y-m-d 00:00:00',strtotime(Carbon::now()->subDays(1)))]
+                    ['currency_conversions.updated_at', '>', date('Y-m-d 00:00:00',strtotime(Carbon::now()->subDays(1)))]
                 ])
                 ->get(array(
                     'currencies.code',
@@ -127,7 +127,7 @@ class CurrencyConversionsController extends Controller
         DB::table('currency_conversions')->insert([
             'curr_id'         => $id,
             'conversion_rate' => floatval(preg_replace('/[^\d.]/', '', $data['exchangeRate'])),
-            'created_at'      => NOW(),
+            'created_at'      => date('Y-m-d H:i:s',strtotime($data['pubDate'])),
             'updated_at'      => NOW()
         ]);
     }
