@@ -60,7 +60,8 @@ $(document).ready(function () {
         }
 
         // additional validation
-        // check if number, string or date
+        if (isNaN(usd)) alert("Invalid USD input.");
+        if (!isNaN(cur)) alert("Invalid Currency input.");
 
         $('#loading').show();
 
